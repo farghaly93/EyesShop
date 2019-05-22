@@ -136,10 +136,10 @@ var CategoriesComponent = /** @class */ (function () {
         this.uiProductsServices.cat('size').subscribe(function (res) {
             _this.cats[4] = res.cats;
         });
-        this.uiProductsServices.getTopLiked().subscribe(function (res) {
-            _this.topLikedItems = res.topLiked;
-            console.log(_this.topLikedItems);
-        });
+        // this.uiProductsServices.getTopLiked().subscribe(res=>{
+        //  this.topLikedItems = res.topLiked;
+        // console.log(this.topLikedItems);
+        // });
         //////////////////////////////////Slider////////////////////////////////////////////////////////////////
     };
     CategoriesComponent.prototype.getAllItems = function () {

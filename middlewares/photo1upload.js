@@ -1,29 +1,29 @@
-const multer = require('multer');
-const aws = require('aws-sdk');
-const multerS3 = require('multer-s3');
 
-aws.config.update({
-secretAccessKey: 'qxH5y7kZ3lOXOkD2QKmR8hIId78VOtyPvXK0jTA1',
-accessKeyId: 'AKIAIHQIW67EGZY2BYCA',
-region: 'us-east-N. Virginia'
-});
-mimeTypes = {
-  'image/png': 'png',
-  'image/jpeg': 'jpg',
-  'image/jpg': 'jpg'
-};
-s3 = new aws.S3();
-const storage = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: 'eyesshop-front',
-    key: function (req, file, cb) {
-        console.log(file);
-        const name = file.originalname.toLowerCase().split(' ').join('-');
-        const ext = mimeTypes[file.mimetype];
-        cb(null, name + '-' + Date.now() + '.' + ext);
-    }
-  })
-});
+const AWS = require('aws-sdk');
+const Busboy = require('busboy');
 
-module.exports =  multer({storage: storage}).array('images');
+const BUCKET_NAME = 'eyesshop-front';
+const IAM_USER_KEY = 'AKIAIHQIW67EGZY2BYCA';
+const IAM_USER_SECRET = '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';
+const file = req.files.element2;
+console.log(file);
+  let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME
+  });
+  s3bucket.createBucket(function () {
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        Body: file.data
+      };
+      s3bucket.upload(params, function (err, data) {
+        if (err) {
+          console.log('error in callback');
+          console.log(err);
+        }
+        console.log('success');
+        console.log(data);
+      });
+  });

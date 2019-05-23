@@ -21,7 +21,7 @@ const storage = s3({
     const ext = mimeTypes[file.mimetype];
     cb(null, name + '-' + Date.now() + '.' + ext);
   },
-  bucket: 'eyesshop-bucke',
+  bucket: 'eyesshop-bucket',
     region: 'us-east-2',
     aws_access_key_id: process.env.AWS_ACCESS_KEY_ID,
     aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY

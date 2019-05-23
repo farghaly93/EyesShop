@@ -21,8 +21,8 @@ const storage = s3({
     const ext = mimeTypes[file.mimetype];
     cb(null, name + '-' + Date.now() + '.' + ext);
   },
-  bucket: 'eyesshop-front',
-    region: 'us-west-N. Virginia'
+  bucket: 'eyesshop-bucket',
+    region: 'us-west-2'
 });
 
 module.exports =  multer({storage: storage}).array('images');

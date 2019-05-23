@@ -23,8 +23,8 @@ const storage = s3({
   },
   bucket: 'eyesshop-bucket',
     region: 'us-east-2',
-    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
+    aws_access_key_id: process.env.AWS_ACCESS_KEY_ID,
+    aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 module.exports =  multer({storage: storage}).array('images');

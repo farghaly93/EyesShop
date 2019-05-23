@@ -19,14 +19,9 @@ const storage = multer({
     bucket: 'eyesshop-front',
     key: function (req, file, cb) {
         console.log(file);
-        let err = new Error('Not right file type');
-        const isValid = mimeTypes[file.mimetype];
-        if(isValid) {
-          err = null;
-        }
         const name = file.originalname.toLowerCase().split(' ').join('-');
         const ext = mimeTypes[file.mimetype];
-        cb(err, name + '-' + Date.now() + '.' + ext);
+        cb(null, name + '-' + Date.now() + '.' + ext);
     }
   })
 });

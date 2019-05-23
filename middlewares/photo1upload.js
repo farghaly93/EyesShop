@@ -1,8 +1,7 @@
 const multer = require('multer');
-aws = require('aws-sdk'),
-bodyParser = require('body-parser'),
-multer = require('multer'),
-multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 
 aws.config.update({
 secretAccessKey: 'qxH5y7kZ3lOXOkD2QKmR8hIId78VOtyPvXK0jTA1',

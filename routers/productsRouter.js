@@ -5,6 +5,10 @@ const Product = require("../models/products");
 const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
+const BUCKET_NAME = 'eyesshop-front';
+const IAM_USER_KEY = 'AKIAIHQIW67EGZY2BYCA';
+const IAM_USER_SECRET = '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';
+
 
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
@@ -70,6 +74,29 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res, next) => {
     let body;
+    const file = req.files.element2;
+console.log(file);
+  let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME
+  });
+  s3bucket.createBucket(function () {
+      var params = {
+        Bucket: BUCKET_NAME,
+        Key: file.name,
+        Body: file.data
+      };
+      s3bucket.upload(params, function (err, data) {
+        if (err) {
+          console.log('error in callback');
+          console.log(err);
+        }
+        console.log('success');
+        console.log(data);
+      });
+  });
+
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 

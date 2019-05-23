@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "node ./server.js",
-    "deploy": "git add ., git commit -am 'update', git push heroku master"
+    "deploy": "git add .| git commit -am 'update'| git push heroku master"
   },
   "private": true,
   "dependencies": {

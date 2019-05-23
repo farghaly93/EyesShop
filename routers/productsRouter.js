@@ -87,8 +87,8 @@ console.log(file);
   s3bucket.createBucket(function () {
       var params = {
         Bucket: BUCKET_NAME,
-        Key: file.name,
-        Body: file.data
+       // Key: file.name,
+       // Body: file.data
       };
       s3bucket.upload(params, function (err, data) {
         if (err) {

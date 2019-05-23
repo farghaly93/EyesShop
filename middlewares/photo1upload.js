@@ -1,16 +1,29 @@
 const multer = require('multer');
+aws = require('aws-sdk'),
+bodyParser = require('body-parser'),
+multer = require('multer'),
+multerS3 = require('multer-s3');
 
-const BUCKET_NAME = 'eyesshop-front';
-const IAM_USER_KEY = 'AKIAIHQIW67EGZY2BYCA';
-const IAM_USER_SECRET = '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';
-
+aws.config.update({
+secretAccessKey: 'qxH5y7kZ3lOXOkD2QKmR8hIId78VOtyPvXK0jTA1',
+accessKeyId: 'AKIAIHQIW67EGZY2BYCA',
+region: 'us-east-1'
+});
 mimeTypes = {
   'image/png': 'png',
   'image/jpeg': 'jpg',
   'image/jpg': 'jpg'
 };
-
-const storage = multer.diskStorage({
+s3 = new aws.S3();
+const storage = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'eyesshop-front',
+    key: function (req, file, cb) {
+        console.log(file);
+        cb(null, file.originalname); //use Date.now() for unique file keys
+    }
+}),
   destination: (req, file, cb) => {
     let err = new Error('Not right file type');
     const isValid = mimeTypes[file.mimetype];

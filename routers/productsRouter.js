@@ -14,13 +14,13 @@ router.post('/api/admin/products/upload', AdminCheck, photo1upload , (req,res,ne
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100);
     post.date = Date.now();
     if(req.files) {
-    const url = "https://" + req.get('host');
-    post.imagePath1 =  url + "/images/" + req.files[0].filename;
+        const url = 'https://s3.us-east-2.amazonaws.com/eyesshop-bucket/';
+    post.imagePath1 =  url + req.files[0].filename;
     if(req.files[1]) {
-    post.imagePath2 =  url + "/images/" + req.files[1].filename;
+    post.imagePath2 =  url + req.files[1].filename;
     }
     if(req.files[2]) {
-    post.imagePath3 =  url + "/images/" + req.files[2].filename;
+    post.imagePath3 =  url + req.files[2].filename;
     }
 }
     const product = new Product(post);
@@ -73,32 +73,32 @@ router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res,
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
-    const url = 'https://' + req.get('host');
+    const url = 'https://s3.us-east-2.amazonaws.com/eyesshop-bucket/';
     if(!post.photo1 && !post.photo2 && !post.photo3 ) {
-        post.imagePath1 = url + '/images/' + req.files[0].filename;
-        post.imagePath2 =  url + "/images/" + req.files[1].filename;
-        post.imagePath3 =  url + "/images/" + req.files[2].filename;
+        post.imagePath1 = url + req.files[0].filename;
+        post.imagePath2 =  url + req.files[1].filename;
+        post.imagePath3 =  url + req.files[2].filename;
     }
     if(post.photo1 && !post.photo2 && !post.photo3 ) {
-        post.imagePath2 =  url + "/images/" + req.files[1].filename;
-        post.imagePath3 =  url + "/images/" + req.files[2].filename;
+        post.imagePath2 =  url + req.files[1].filename;
+        post.imagePath3 =  url + req.files[2].filename;
     }
     if(!post.photo1 && post.photo2 && !post.photo3 ) {
-        post.imagePath1 =  url + "/images/" + req.files[0].filename;
-        post.imagePath3 =  url + "/images/" + req.files[2].filename;
+        post.imagePath1 =  url + req.files[0].filename;
+        post.imagePath3 =  url + req.files[2].filename;
     }
     if(!post.photo1 && !post.photo2 && post.photo3 ) {
-        post.imagePath1 =  url + "/images/" + req.files[0].filename;
-        post.imagePath2 =  url + "/images/" + req.files[1].filename;
+        post.imagePath1 =  url + req.files[0].filename;
+        post.imagePath2 =  url + req.files[1].filename;
     }
     if(post.photo3 && post.photo2) {
-        post.imagePath1 = url + '/images/' + req.files[0].filename;
+        post.imagePath1 = url + req.files[0].filename;
     }
     if(post.photo1 && post.photo3) {
-        post.imagePath2 =  url + "/images/" + req.files[0].filename;
+        post.imagePath2 =  url + req.files[0].filename;
     }
     if(post.photo1 && post.photo2) {
-        post.imagePath3 =  url + "/images/" + req.files[0].filename;
+        post.imagePath3 =  url + req.files[0].filename;
     }
   }
   console.log(post,  req.files[0].filename);

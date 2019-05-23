@@ -19,19 +19,17 @@ const storage = multer({
     bucket: 'eyesshop-front',
     key: function (req, file, cb) {
         console.log(file);
+        let err = new Error('Not right file type');
+        const isValid = mimeTypes[file.mimetype];
+        if(isValid) {
+          err = null;
+        }
+        cb(err, 'images');
         const name = file.originalname.toLowerCase().split(' ').join('-');
         const ext = mimeTypes[file.mimetype];
         cb(null, name + '-' + Date.now() + '.' + ext);
     }
-}),
-  destination: (req, file, cb) => {
-    let err = new Error('Not right file type');
-    const isValid = mimeTypes[file.mimetype];
-    if(isValid) {
-      err = null;
-    }
-    cb(err, 'images');
-  }
+  })
 });
 
 module.exports =  multer({storage: storage}).array('images');

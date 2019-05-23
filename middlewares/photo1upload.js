@@ -22,7 +22,7 @@ const storage = s3({
     cb(null, name + '-' + Date.now() + '.' + ext);
   },
   bucket: 'eyesshop-front',
-    region: 'us-west-2'
+    region: 'us-west-N. Virginia'
 });
 
 module.exports =  multer({storage: storage}).array('images');

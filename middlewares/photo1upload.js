@@ -22,7 +22,10 @@ const storage = s3({
     cb(null, name + '-' + Date.now() + '.' + ext);
   },
   bucket: 'eyesshop-bucket',
-    region: 'us-east-2'
+    region: 'us-east-2',
+    config = new AWS.Config({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY, region: 'us-east-2'
+    })
 });
 
 module.exports =  multer({storage: storage}).array('images');

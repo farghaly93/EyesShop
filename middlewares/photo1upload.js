@@ -5,7 +5,7 @@ const multerS3 = require('multer-s3');
 aws.config.update({
 secretAccessKey: 'qxH5y7kZ3lOXOkD2QKmR8hIId78VOtyPvXK0jTA1',
 accessKeyId: 'AKIAIHQIW67EGZY2BYCA',
-region: 'us-east-1'
+region: 'us-east-N. Virginia'
 });
 mimeTypes = {
   'image/png': 'png',

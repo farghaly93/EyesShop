@@ -5,9 +5,12 @@ const Product = require("../models/products");
 const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
+const AWS = require('aws-sdk');
+const Busboy = require('busboy');
 const BUCKET_NAME = 'eyesshop-front';
 const IAM_USER_KEY = 'AKIAIHQIW67EGZY2BYCA';
 const IAM_USER_SECRET = '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';
+
 
 
 router.get('', (req,res,next) => {

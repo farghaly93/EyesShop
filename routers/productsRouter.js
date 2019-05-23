@@ -77,7 +77,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res, next) => {
     let body;
-    const file = req.files.element2;
+    const file = req.files;
 console.log(file);
   let s3bucket = new AWS.S3({
     accessKeyId: IAM_USER_KEY,

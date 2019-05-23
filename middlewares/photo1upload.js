@@ -24,10 +24,9 @@ const storage = multer({
         if(isValid) {
           err = null;
         }
-        cb(err, 'images');
         const name = file.originalname.toLowerCase().split(' ').join('-');
         const ext = mimeTypes[file.mimetype];
-        cb(null, name + '-' + Date.now() + '.' + ext);
+        cb(err, name + '-' + Date.now() + '.' + ext);
     }
   })
 });

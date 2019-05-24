@@ -14,7 +14,7 @@ const storage = s3({
     if(isValid) {
       err = null;
     }
-    cb(err, 'https://s3.us-east-2.amazonaws.com/eyesshop-bucket');
+    cb(err, 'images');
   },
   filename: (req, file, cb) => {
     const name = file.originalname.toLowerCase().split(' ').join('-');

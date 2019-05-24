@@ -6,6 +6,8 @@ const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
 
+const url = 'https://eyesshop.herokuapp.com/images/';
+
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
 });
@@ -14,7 +16,6 @@ router.post('/api/admin/products/upload', AdminCheck, photo1upload , (req,res,ne
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100);
     post.date = Date.now();
     if(req.files) {
-        const url = 'https://s3.us-east-2.amazonaws.com/eyesshop-bucket/';
     post.imagePath1 =  url + req.files[0].filename;
     if(req.files[1]) {
     post.imagePath2 =  url + req.files[1].filename;
@@ -73,7 +74,6 @@ router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res,
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
-    const url = 'https://s3.us-east-2.amazonaws.com/eyesshop-bucket/';
     if(!post.photo1 && !post.photo2 && !post.photo3 ) {
         post.imagePath1 = url + req.files[0].filename;
         post.imagePath2 =  url + req.files[1].filename;

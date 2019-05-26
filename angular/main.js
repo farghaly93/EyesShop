@@ -398,6 +398,7 @@ var AdminServices = /** @class */ (function () {
             postData.append('size', post.size);
             postData.append('description', post.description);
         }
+        console.log(postData);
         var req = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpRequest"]('PUT', url + 'products/edit', postData, {
             reportProgress: true,
         });

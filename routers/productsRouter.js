@@ -101,7 +101,6 @@ router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, 
         post.imagePath3 =  url + req.files[0].filename;
     }
   }
-  console.log(post,  req.files[0].filename); 
 
     const id = post.id;
     console.log('hello', id, post);

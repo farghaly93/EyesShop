@@ -125,8 +125,10 @@ router.get('/api/ui/cart/get/:id',userGet , async(req, res, next) => {
         [updatedCart, count] = await Promise.all([a, b]);
         for(oneCart of updatedCart) {
         const prod = await Product.findById(oneCart.proid);
+        if(prod) {
         const img = prod.imagePath1;
         oneCart.image = img;
+        }
     }
         res.status(200).json({updatedCart, count});
     } catch(err) {

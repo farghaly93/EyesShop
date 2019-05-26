@@ -69,7 +69,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res, next) => {
+router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     /*let post;
     if(req.files) {
     post = req.body;

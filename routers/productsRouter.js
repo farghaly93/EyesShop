@@ -70,9 +70,10 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
     }
 });
 router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res, next) => {
-    let body;
+    const post = req.body;
+
+    /*let body;
     if(req.files) {
-    post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
     if(!post.photo1 && !post.photo2 && !post.photo3 ) {
         post.imagePath1 = url + req.files[0].filename;
@@ -101,8 +102,8 @@ router.put('/api/admin/products/edit', AdminCheck, photo1upload ,async(req, res,
         post.imagePath3 =  url + req.files[0].filename;
     }
   }
-  console.log(post,  req.files[0].filename);
-
+  console.log(post,  req.files[0].filename); */
+    console.log(post);
     const id = post.id;
     const update = await Product.updateOne({_id: id}, post);
     if(update) {req

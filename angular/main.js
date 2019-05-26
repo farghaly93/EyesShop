@@ -382,13 +382,13 @@ var AdminServices = /** @class */ (function () {
                 postData.append('photo3', post.photo3);
             }
             if (post.photo1) {
-                postData.append('images', post.photo1);
+                postData.append('imagePath1', post.photo1);
             }
             if (post.photo2) {
-                postData.append('images', post.photo2);
+                postData.append('imagePath2', post.photo2);
             }
             if (post.photo3) {
-                postData.append('images', post.photo3);
+                postData.append('imagePath3', post.photo3);
             }
             postData.append('type', post.type);
             postData.append('design', post.design);

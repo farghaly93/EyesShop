@@ -103,7 +103,7 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
   }
   console.log(post,  req.files[0].filename); */
 
-    const id = req.post;
+    const id = post.id;
     console.log('hello', id, post);
     const update = await Product.updateOne({_id: id}, post);
     if(update) {req

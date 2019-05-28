@@ -116,7 +116,7 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     ACL: 'public-read',
     Body: post.images[0]
   };
- console.log(post.images[0]);
+ console.log(post.images);
 });
     
 router.get('/api/admin/products/search/:q', async(req, res, next) => {

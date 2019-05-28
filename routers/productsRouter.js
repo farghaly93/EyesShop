@@ -112,9 +112,9 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
   
   const params = {
     Bucket: 'eyesshop-bucket',
-    Key: 'images/'+post.images[0],
+    Key: 'images/'+post.images,
     ACL: 'public-read',
-    Body: post.images[0]
+    Body: post.images
   };
  console.log(post.images);
 });

@@ -79,7 +79,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     let post = req.body;
-    multer.diskStorage({
+    const storage = multer.diskStorage({
         destination: (req, file, cb) => {
             if(typeof file === 'string') return;
             console.log(file);

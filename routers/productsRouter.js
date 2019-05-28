@@ -119,13 +119,12 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
   s3.putObject(params, function (err, data) {
     if (err) {
       console.log("Error: ", err);
-    } else {
-        const id = post.id;
+    } 
+    const id = post.id;
     console.log('hello', id, post);
     const update = await Product.updateOne({_id: id}, post);
     if(update) {req
     res.json({mess: 'Updated successfully'});
-    }
     }
   });
 });

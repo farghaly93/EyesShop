@@ -71,6 +71,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, next) => {
     let post = req.body;
+    console.log(post);
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
@@ -100,6 +101,12 @@ router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, 
     if(post.photo1 && post.photo2) {
         post.imagePath3 =  url + req.files[0].filename;
     }
+    const params = {
+        Bucket: 'eyesshop-bucket',
+        Key: '(folder + file)',
+        ACL: 'public-read',
+        Body: 'file'
+      };
   }
 
     const id = post.id;

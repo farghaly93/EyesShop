@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+var s3 = require( 'multer-storage-s3' );
 const router = express.Router();
 const photo1upload = require("../middlewares/photo1upload");
 const Product = require("../models/products");
@@ -7,6 +9,12 @@ const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
 
 const url = 'https://eyesshop.herokuapp.com/images/';
+
+mimeTypes = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+  };
 
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
@@ -69,7 +77,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, next) => {
+router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     let post = req.body;
     if(req.files) {
     post = req.body;
@@ -100,21 +108,28 @@ router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, 
     if(post.photo1 && post.photo2) {
         post.imagePath3 =  url + req.files[0].filename;
     }
-    const params = {
-        Bucket: 'eyesshop-bucket',
-        Key: '(folder + file)',
-        ACL: 'public-read',
-        Body: 'file'
-      };
   }
-
-    const id = post.id;
+  
+  const params = {
+    Bucket: 'eyesshop-bucket',
+    Key: 'images/'+post.images[0],
+    ACL: 'public-read',
+    Body: post.images[0]
+  };
+  s3.putObject(params, function (err, data) {
+    if (err) {
+      console.log("Error: ", err);
+    } else {
+        const id = post.id;
     console.log('hello', id, post);
     const update = await Product.updateOne({_id: id}, post);
     if(update) {req
     res.json({mess: 'Updated successfully'});
     }
+    }
+  });
 });
+    
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {
         console.log(req.params.q);

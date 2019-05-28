@@ -81,7 +81,6 @@ router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, 
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
           if(typeof file === 'string') return;
-          console.log(file);
           let err = new Error('Not right file type');
           const isValid = mimeTypes[file.mimetype];
           if(isValid) {

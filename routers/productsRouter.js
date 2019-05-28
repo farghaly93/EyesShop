@@ -79,7 +79,25 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     let post = req.body;
-    console.log(post.brand);
+    multer.diskStorage({
+        destination: (req, file, cb) => {
+            if(typeof file === 'string') return;
+            console.log(file);
+            let err = new Error('Not right file type');
+            const isValid = mimeTypes[file.mimetype];
+            if(isValid) {
+              err = null;
+            }
+            cb(err, 'images');
+          },
+          filename: (req, file, cb) => {
+            const name = file.originalname.toLowerCase().split(' ').join('-');
+            const ext = mimeTypes[file.mimetype];
+            cb(null, name + '-' + Date.now() + '.' + ext);
+          },
+    });
+    multer({storage: storage}).array('images');
+    console.log(post);
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 

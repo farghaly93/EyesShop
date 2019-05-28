@@ -79,6 +79,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     let post = req.body;
+    console.log(post);
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
@@ -116,7 +117,7 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     ACL: 'public-read',
     Body: post.images
   };
- console.log(post);
+ 
 });
     
 router.get('/api/admin/products/search/:q', async(req, res, next) => {

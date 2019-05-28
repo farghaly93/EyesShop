@@ -76,7 +76,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, next) => {
+router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     let post = req.body;
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
@@ -94,6 +94,7 @@ router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, 
           cb(null, name + '-' + Date.now() + '.' + ext);
         },
       });
+      multer({storage:storage}).array('images')
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 

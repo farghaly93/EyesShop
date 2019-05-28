@@ -116,17 +116,7 @@ router.put('/api/admin/products/edit', AdminCheck ,async(req, res, next) => {
     ACL: 'public-read',
     Body: post.images[0]
   };
-  s3.putObject(params, function (err, data) {
-    if (err) {
-      console.log("Error: ", err);
-    } 
-    const id = post.id;
-    console.log('hello', id, post);
-    const update = await Product.updateOne({_id: id}, post);
-    if(update) {req
-    res.json({mess: 'Updated successfully'});
-    }
-  });
+ console.log(post.images[0]);
 });
     
 router.get('/api/admin/products/search/:q', async(req, res, next) => {

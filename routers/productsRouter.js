@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const photo1upload = require("../middlewares/photo1upload");
+const multer = require('multer');
 const Product = require("../models/products");
 const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
 
 const url = 'https://eyesshop.herokuapp.com/images/';
+
+mimeTypes = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+  };
 
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
@@ -71,6 +78,23 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck ,photo1upload,async(req, res, next) => {
     let post = req.body;
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+          if(typeof file === 'string') return;
+          console.log(file);
+          let err = new Error('Not right file type');
+          const isValid = mimeTypes[file.mimetype];
+          if(isValid) {
+            err = null;
+          }
+          cb(err, 'images');
+        },
+        filename: (req, file, cb) => {
+          const name = file.originalname.toLowerCase().split(' ').join('-');
+          const ext = mimeTypes[file.mimetype];
+          cb(null, name + '-' + Date.now() + '.' + ext);
+        },
+      });
     if(req.files) {
     post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 

@@ -94,9 +94,8 @@ router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
           cb(null, name + '-' + Date.now() + '.' + ext);
         },
       });
-      multer({storage:storage}).array('images')
+      multer({storage:storage}).array('images');
     if(req.files) {
-    post = req.body;
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
     if(!post.photo1 && !post.photo2 && !post.photo3 ) {
         post.imagePath1 = url + req.files[0].filename;

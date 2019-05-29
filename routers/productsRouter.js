@@ -8,10 +8,10 @@ const authCheck = require("../middlewares/authCheck");
 const aws = require('aws-sdk');
 
 aws.config.update({
-    accessKeyId: envVars.AWS_ACCESS_KEY_ID,
-    secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     signatureVersion: 'v4',
-    region: 'eu-west-2',
+    region: 'us-east-2',
   });
   
   const s3 = new aws.S3();

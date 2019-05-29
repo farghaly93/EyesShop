@@ -1,11 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const photo1upload = require("../middlewares/photo1upload");
-const multer = require('multer');
 const Product = require("../models/products");
 const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
+const aws = require('aws-sdk');
+
+aws.config.update({
+    accessKeyId: envVars.AWS_ACCESS_KEY_ID,
+    secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
+    signatureVersion: 'v4',
+    region: 'eu-west-2',
+  });
+  
+  const s3 = new aws.S3();
 
 const url = 'https://eyesshop.herokuapp.com/images/';
 
@@ -70,8 +79,20 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', photo1upload, AdminCheck,async(req, res, next) => {
-    console.log(req.body);
+router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
+    const params = {
+        Bucket: bucket,
+        Key: `${Date.now().toString()}-${req.body.images}`,
+        ContentType: req.body.contentType,
+      };
+    
+      s3.getSignedUrl('putObject', params, (err, url) => {
+        res.status(200).json({
+          method: 'put',
+          url,
+          fields: {},
+        });
+      });
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {

@@ -81,9 +81,9 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     const params = {
-        Bucket: bucket,
+        Bucket: 'eyesshop-bucket',
         Key: `${Date.now().toString()}-${req.body.images}`,
-        ContentType: req.body.contentType,
+        ContentType: 'jpg',
       };
     
       s3.getSignedUrl('putObject', params, (err, url) => {

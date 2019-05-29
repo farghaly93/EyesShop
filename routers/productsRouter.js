@@ -22,27 +22,17 @@ router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
 });
 router.post('/api/admin/products/upload', AdminCheck, photo1upload , (req,res,next) => {
-    const post = req.body;
-    post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100);
-    post.date = Date.now();
-    if(req.files) {
-    post.imagePath1 =  url + req.files[0].filename;
-    if(req.files[1]) {
-    post.imagePath2 =  url + req.files[1].filename;
-    }
-    if(req.files[2]) {
-    post.imagePath3 =  url + req.files[2].filename;
-    }
-}
-    const product = new Product(post);
-    product.save().then(item=>{
+    const params = {
+        Bucket: 'eyesshop',
+        Key: `${Date.now().toString()}-hahahaha.jpg`,
+        ContentType: 'jpg',
+      };
+    
+      s3.getSignedUrl('putObject', params, (err, url) => {
         res.status(200).json({
-            message: "Uploaded successfully",
-            item
+          method: 'put',
         });
-    }).catch(err => {
-        res.json({mess: "Upload failed please try again.."});
-    });
+      });
 });
 
 router.get('/api/admin/products/getAll/:skip/:limit', AdminCheck, async(req, res, next) => {
@@ -89,8 +79,6 @@ router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
       s3.getSignedUrl('putObject', params, (err, url) => {
         res.status(200).json({
           method: 'put',
-          url,
-          fields: {},
         });
       });
 });

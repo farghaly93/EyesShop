@@ -70,7 +70,7 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
+router.put('/api/admin/products/edit', photo1upload, AdminCheck,async(req, res, next) => {
     console.log(req.body);
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {

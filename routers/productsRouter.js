@@ -14,6 +14,24 @@ const mimeTypes = {
     'image/jpeg': 'jpg',
     'image/jpg': 'jpg'
   };
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        console.log(file);
+      if(typeof file === 'string') return;
+      let err = new Error('Not right file type');
+      const isValid = mimeTypes[file.mimetype];
+      if(isValid) {
+        err = null;
+      }
+      cb(err, 'images');
+    },
+    filename: (req, file, cb) => {
+      const name = file.originalname.toLowerCase().split(' ').join('-');
+      const ext = mimeTypes[file.mimetype];
+      cb(null, name + '-' + Date.now() + '.' + ext);
+    },
+  });
+  const upload = multer({storage:storage}); 
 
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
@@ -76,26 +94,9 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
+router.put('/api/admin/products/edit', upload.array('images', 3), AdminCheck,async(req, res, next) => {
     let post = req.body;
-    const storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            console.log(file);
-          if(typeof file === 'string') return;
-          let err = new Error('Not right file type');
-          const isValid = mimeTypes[file.mimetype];
-          if(isValid) {
-            err = null;
-          }
-          cb(err, 'images');
-        },
-        filename: (req, file, cb) => {
-          const name = file.originalname.toLowerCase().split(' ').join('-');
-          const ext = mimeTypes[file.mimetype];
-          cb(null, name + '-' + Date.now() + '.' + ext);
-        },
-      });
-      multer({storage:storage}).array('images');
+    
     if(req.files) {
     post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
     if(!post.photo1 && !post.photo2 && !post.photo3 ) {
@@ -126,12 +127,12 @@ router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     }
   }
 
-   // const id = post.id;
-   // console.log('hello', post);
-    //const update = await Product.updateOne({_id: id}, post);
-    //if(update) {req
-    //res.json({mess: 'Updated successfully'});
-   // }
+    const id = post.id;
+    console.log('hello', post);
+    const update = await Product.updateOne({_id: id}, post);
+    if(update) {req
+    res.json({mess: 'Updated successfully'});
+    }
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {

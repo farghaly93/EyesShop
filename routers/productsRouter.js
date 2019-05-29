@@ -9,30 +9,6 @@ const authCheck = require("../middlewares/authCheck");
 
 const url = 'https://eyesshop.herokuapp.com/images/';
 
-const mimeTypes = {
-    'image/png': 'png',
-    'image/jpeg': 'jpg',
-    'image/jpg': 'jpg'
-  };
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        console.log(file);
-      if(typeof file === 'string') return;
-      let err = new Error('Not right file type');
-      const isValid = mimeTypes[file.mimetype];
-      if(isValid) {
-        err = null;
-      }
-      cb(err, 'images');
-    },
-    filename: (req, file, cb) => {
-      const name = file.originalname.toLowerCase().split(' ').join('-');
-      const ext = mimeTypes[file.mimetype];
-      cb(null, name + '-' + Date.now() + '.' + ext);
-    },
-  });
-  const upload = multer({storage:storage}); 
-
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
 });
@@ -94,45 +70,8 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', upload.array('images', 3), AdminCheck,async(req, res, next) => {
-    let post = req.body;
-    
-    if(req.files) {
-    post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
-    if(!post.photo1 && !post.photo2 && !post.photo3 ) {
-        post.imagePath1 = url + req.files[0].filename;
-        post.imagePath2 =  url + req.files[1].filename;
-        post.imagePath3 =  url + req.files[2].filename;
-    }
-    if(post.photo1 && !post.photo2 && !post.photo3 ) {
-        post.imagePath2 =  url + req.files[1].filename;
-        post.imagePath3 =  url + req.files[2].filename;
-    }
-    if(!post.photo1 && post.photo2 && !post.photo3 ) {
-        post.imagePath1 =  url + req.files[0].filename;
-        post.imagePath3 =  url + req.files[2].filename;
-    }
-    if(!post.photo1 && !post.photo2 && post.photo3 ) {
-        post.imagePath1 =  url + req.files[0].filename;
-        post.imagePath2 =  url + req.files[1].filename;
-    }
-    if(post.photo3 && post.photo2) {
-        post.imagePath1 = url + req.files[0].filename;
-    }
-    if(post.photo1 && post.photo3) {
-        post.imagePath2 =  url + req.files[0].filename;
-    }
-    if(post.photo1 && post.photo2) {
-        post.imagePath3 =  url + req.files[0].filename;
-    }
-  }
-
-    const id = post.id;
-    console.log('hello', post);
-    const update = await Product.updateOne({_id: id}, post);
-    if(update) {req
-    res.json({mess: 'Updated successfully'});
-    }
+router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
+    console.log(req.body);
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {

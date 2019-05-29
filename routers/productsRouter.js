@@ -81,8 +81,8 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
 });
 router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     const params = {
-        Bucket: 'eyesshop-bucket',
-        Key: `${Date.now().toString()}-${req.body.images}`,
+        Bucket: 'eyesshop',
+        Key: `${Date.now().toString()}-hahahaha.jpg`,
         ContentType: 'jpg',
       };
     

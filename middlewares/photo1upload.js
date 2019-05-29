@@ -1,32 +1,25 @@
-const multer = require('multer');
-var s3 = require( 'multer-storage-s3' );
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 
-mimeTypes = {
-  'image/png': 'png',
-  'image/jpeg': 'jpg',
-  'image/jpg': 'jpg'
-};
+// Bucket names must be unique across all S3 users
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if(typeof file === 'string') return;
-    console.log(file);
-    let err = new Error('Not right file type');
-    const isValid = mimeTypes[file.mimetype];
-    if(isValid) {
-      err = null;
-    }
-    cb(err, 'images');
-  },
-  filename: (req, file, cb) => {
-    const name = file.originalname.toLowerCase().split(' ').join('-');
-    const ext = mimeTypes[file.mimetype];
-    cb(null, name + '-' + Date.now() + '.' + ext);
-  },
-  //bucket: 'eyesshop-bucket',
-   // region: 'us-east-2',
-    //aws_access_key_id: process.env.AWS_ACCESS_KEY_ID,
-    //aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
-});
+var myBucket = 'eyesshop-bucket';
 
-module.exports =  multer({storage: storage}).array('images');
+var myKey = 'textFile';
+
+
+ params = {Bucket: myBucket, Key: myKey, Body: 'Valueeee or some data' };
+
+     s3.putObject(params, function(err, data) {
+
+         if (err) {
+
+             console.log(err)
+
+         } else {
+
+             console.log("Successfully uploaded data to myBucket/myKey");
+
+         }
+
+      });

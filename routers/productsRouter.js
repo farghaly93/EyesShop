@@ -7,7 +7,7 @@ const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
 
-const url = 'https://eyesshop.herokuapp.com/images/';
+const url =  'https://eyesshop.herokuapp.com/images/';
 
 router.get('', (req,res,next) => {
     res.send('Hello Farghaly');

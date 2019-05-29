@@ -9,7 +9,7 @@ const authCheck = require("../middlewares/authCheck");
 
 const url = 'https://eyesshop.herokuapp.com/images/';
 
-mimeTypes = {
+const mimeTypes = {
     'image/png': 'png',
     'image/jpeg': 'jpg',
     'image/jpg': 'jpg'
@@ -80,6 +80,7 @@ router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     let post = req.body;
     const storage = multer.diskStorage({
         destination: (req, file, cb) => {
+            console.log(file);
           if(typeof file === 'string') return;
           let err = new Error('Not right file type');
           const isValid = mimeTypes[file.mimetype];

@@ -126,12 +126,12 @@ router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
     }
   }
 
-    const id = post.id;
-    console.log('hello', post);
-    const update = await Product.updateOne({_id: id}, post);
-    if(update) {req
-    res.json({mess: 'Updated successfully'});
-    }
+   // const id = post.id;
+   // console.log('hello', post);
+    //const update = await Product.updateOne({_id: id}, post);
+    //if(update) {req
+    //res.json({mess: 'Updated successfully'});
+   // }
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {

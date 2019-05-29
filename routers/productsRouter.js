@@ -1,20 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const photo1upload = require("../middlewares/photo1upload");
+const multer = require('multer');
 const Product = require("../models/products");
 const User = require("../models/user");
 const AdminCheck = require("../middlewares/adminCheck");
 const authCheck = require("../middlewares/authCheck");
-const aws = require('aws-sdk');
-
-aws.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    signatureVersion: 'v4',
-    region: 'us-west-2',
-  });
-  
-  const s3 = new aws.S3();
 
 const url = 'https://eyesshop.herokuapp.com/images/';
 
@@ -22,17 +13,27 @@ router.get('', (req,res,next) => {
     res.send('Hello Farghaly');
 });
 router.post('/api/admin/products/upload', AdminCheck, photo1upload , (req,res,next) => {
-    const params = {
-        Bucket: 'eyesshop',
-        Key: `${Date.now().toString()}-hahahaha.jpg`,
-        ContentType: 'jpg',
-      };
-    
-      s3.getSignedUrl('putObject', params, (err, url) => {
+    const post = req.body;
+    post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100);
+    post.date = Date.now();
+    if(req.files) {
+    post.imagePath1 =  url + req.files[0].filename;
+    if(req.files[1]) {
+    post.imagePath2 =  url + req.files[1].filename;
+    }
+    if(req.files[2]) {
+    post.imagePath3 =  url + req.files[2].filename;
+    }
+}
+    const product = new Product(post);
+    product.save().then(item=>{
         res.status(200).json({
-          method: 'put',
+            message: "Uploaded successfully",
+            item
         });
-      });
+    }).catch(err => {
+        res.json({mess: "Upload failed please try again.."});
+    });
 });
 
 router.get('/api/admin/products/getAll/:skip/:limit', AdminCheck, async(req, res, next) => {
@@ -69,18 +70,45 @@ router.get('/api/admin/products/getOne/:id', AdminCheck, async(req, res, next) =
         res.status(401).json({mess: 'failed to get this one...'});
     }
 });
-router.put('/api/admin/products/edit', AdminCheck,async(req, res, next) => {
-    const params = {
-        Bucket: 'eyesshop',
-        Key: `${Date.now().toString()}-hahahaha.jpg`,
-        ContentType: 'jpg',
-      };
+router.put('/api/admin/products/edit', photo1upload, AdminCheck,async(req, res, next) => {
+    let post = req.body;
     
-      s3.getSignedUrl('putObject', params, (err, url) => {
-        res.status(200).json({
-          method: 'put',
-        });
-      });
+    if(req.files) {
+    post.discount = Math.ceil(((post.oldPrice - post.newPrice)/post.oldPrice)*100); 
+    if(!post.photo1 && !post.photo2 && !post.photo3 ) {
+        post.imagePath1 = url + req.files[0].filename;
+        post.imagePath2 =  url + req.files[1].filename;
+        post.imagePath3 =  url + req.files[2].filename;
+    }
+    if(post.photo1 && !post.photo2 && !post.photo3 ) {
+        post.imagePath2 =  url + req.files[1].filename;
+        post.imagePath3 =  url + req.files[2].filename;
+    }
+    if(!post.photo1 && post.photo2 && !post.photo3 ) {
+        post.imagePath1 =  url + req.files[0].filename;
+        post.imagePath3 =  url + req.files[2].filename;
+    }
+    if(!post.photo1 && !post.photo2 && post.photo3 ) {
+        post.imagePath1 =  url + req.files[0].filename;
+        post.imagePath2 =  url + req.files[1].filename;
+    }
+    if(post.photo3 && post.photo2) {
+        post.imagePath1 = url + req.files[0].filename;
+    }
+    if(post.photo1 && post.photo3) {
+        post.imagePath2 =  url + req.files[0].filename;
+    }
+    if(post.photo1 && post.photo2) {
+        post.imagePath3 =  url + req.files[0].filename;
+    }
+  }
+
+    const id = post.id;
+    console.log('hello', post);
+    const update = await Product.updateOne({_id: id}, post);
+    if(update) {req
+    res.json({mess: 'Updated successfully'});
+    }
 });
 router.get('/api/admin/products/search/:q', async(req, res, next) => {
     try {

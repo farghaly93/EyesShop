@@ -1,28 +1,30 @@
-var AWS = require('aws-sdk'),
-    fs = require('fs');
+const multer = require('multer');
+var s3 = require( 'multer-storage-s3' );
 
-// For dev purposes only
-AWS.config.update({ accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY });
+mimeTypes = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+};
 
-// Read in the file, convert it to base64, store to S3
-fs.readFile('hahahaha.jpg', function (err, data) {
-  if (err) { throw err; }
-
-  var base64data = new Buffer(data, 'binary');
-
-  var s3 = new AWS.S3();
-  s3.client.putObject({
-    Bucket: 'eyesshop-bucket',
-    Key: 'hahahaha.jpg',
-    Body: base64data,
-    ACL: 'public-read'
-  },function (resp) {
-    console.log(arguments);
-    console.log('Successfully uploaded package.');
-  });
-
-});
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    let err = new Error('Not right file type');
+    const isValid = mimeTypes[file.mimetype];
+    if(isValid) {
+      err = null;
+    }
+    cb(err, 'images');
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const ext = mimeTypes[file.mimetype];
+    cb(null, name + '-' + Date.now() + '.' + ext);
+  },
   //bucket: 'eyesshop-bucket',
    // region: 'us-east-2',
     //aws_access_key_id: process.env.AWS_ACCESS_KEY_ID,
     //aws_secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
+});
+
+module.exports =  multer({storage: storage}).array('images');
